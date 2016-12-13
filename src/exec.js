@@ -680,7 +680,7 @@ function decode(instruction) {
 		break;
 	*/
 
-	// Immmediate to accumulator.
+	// Immediate to accumulator.
 	case 0x24:
 		break;
 	case 0x25:
@@ -833,7 +833,7 @@ function decode(instruction) {
 		break;
 	*/
 
-		// Direct intersegment.
+	// Direct intersegment.
 	case 0xEA:
 		break;
 
