@@ -52,11 +52,16 @@ var rIP = 0x0000;
  */
 var rST = 0x0000;
 
+/*
+ * Memory
+ * The 8086 can address up to 1MB of RAM.
+ */
+var I8086_MEMORY_SIZE = 0x100000;
+var ram8086 = new Array(I8086_MEMORY_SIZE).fill(0xff);
 
 
 // Run program
 run8086();
-
 
 // Main program loop
 function run8086() {
@@ -68,6 +73,13 @@ function run8086() {
 		
 		console.log('[LOG] Increasing IP by 1');
 		rIP = 0x0001;
+		
+		console.log('[LOG] Set the memory index 96 to have value 0x32.')
+		ram8086[96] = 0x32;
+		
+		console.log('[LOG] Show memory index 96 in rAX and 97 in rBX.')
+		rAX = ram8086[96];
+		rBX = ram8086[97];
 		
 		debugRegisters();
 		break;
