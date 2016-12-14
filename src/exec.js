@@ -82,6 +82,87 @@ function run8086() {
 	}
 }
 
+/*
+ * Mod-Reg-RM
+ */
+function modRegRM(w) {
+	var modRegRM_byte = ram8086[rIP+1];
+	var mod, reg, rm;
+	var oper;
+	/*
+	 * Mod - Displacement
+	 * 00 - DISP = 0*, disp-low and disp-high are absent.
+	 * 01 - DISP = disp-low sign-extended to 16 bits, disp-high is absent.
+	 * 10 - DISP = disp-high : disp-low (16-bit displacement).
+	 * 11 - r/m is treated as a "reg" field.
+	 */
+	mod = (modRegRM_byte & 0xC0) >> 6;
+	
+	/*
+	 * Reg field Bit assignments
+	 * Bits - 16bit (w=1) - 8bit (w=0)
+	 * 000 - AX - AL
+	 * 001 - CX - CL
+	 * 010 - DX - DL
+	 * 011 - BX - BL
+	 * 100 - SP - AH
+	 * 101 - BP - CH
+	 * 110 - SI - DH
+	 * 111 - DI - BH
+	 */
+	reg = (modRegRM_byte & 0x38) >> 3;
+	
+	if (w == 1) {
+		switch (reg) {
+		case 0x00: oper = 'AX'; break;
+		case 0x01: oper = 'CX'; break;
+		case 0x02: oper = 'DX'; break;
+		case 0x03: oper = 'BX'; break;
+		case 0x04: oper = 'SP'; break;
+		case 0x05: oper = 'BP'; break;
+		case 0x06: oper = 'SI'; break;
+		case 0x07: oper = 'DI'; break;
+		default: break;
+		}
+	} else if (w == 0) {
+		switch (reg) {
+		case 0x00: oper = 'AL'; break;
+		case 0x01: oper = 'CL'; break;
+		case 0x02: oper = 'DL'; break;
+		case 0x03: oper = 'BL'; break;
+		case 0x04: oper = 'AH'; break;
+		case 0x05: oper = 'CH'; break;
+		case 0x06: oper = 'DH'; break;
+		case 0x07: oper = 'BH'; break;
+		default: break;
+		}
+	}
+	
+	/*
+	 * r/m - Operand address
+	 * 000 - (BX) + (SI) + DISP
+	 * 001 - (BX) + (DI) + DISP
+	 * 010 - (BP) + (SI) + DISP
+	 * 011 - (BP) + (DI) + DISP
+	 * 100 - (SI) + DISP
+	 * 101 - (DI) + DISP
+	 * 110 - (BP) + DISP*
+	 * 111 - (BX) + DISP
+	 */
+	switch (rm) {
+	case 0x00: oper2 = 'BX + SI + DISP'; break;
+	case 0x01: oper2 = 'BX + DI + DISP'; break;
+	case 0x02: oper2 = 'BP + SI + DISP'; break;
+	case 0x03: oper2 = 'BP + DI + DISP'; break;
+	case 0x04: oper2 = 'SI + DISP'; break;
+	case 0x05: oper2 = 'DI + DISP'; break;
+	case 0x06: oper2 = 'BP + DISP*'; break;
+	case 0x07: oper2 = 'BX + DISP'; break;
+	default: break;
+	}
+}
+
+// Process the opcodes.
 function decode(instruction) {
 	
 	switch (instruction) {
