@@ -33,7 +33,7 @@ function readData(data) {
 		switch(opcode) {
 		case 'clc': mcode = 0xf8; break;
 		case 'cmc': mcode = 0xf6; break;
-		case 'stc': mcode = 0xf5; break;
+		case 'stc': mcode = 0xf9; break;
 		case 'cld': mcode = 0xfc; break;
 		case 'std': mcode = 0xfd; break;
 		case 'cli': mcode = 0xfa; break;
