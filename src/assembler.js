@@ -23,11 +23,28 @@ function asm8086() {
 
 function readData(data) {
 	var opcode;
+	var mcode;
 
 	while(charIndex < data.length) {
 		opcode = readWord(data);
 		
 		console.log(opcode);
+		
+		switch(opcode) {
+		case 'clc': mcode = 0xf8; break;
+		case 'cmc': mcode = 0xf6; break;
+		case 'stc': mcode = 0xf5; break;
+		case 'cld': mcode = 0xfc; break;
+		case 'std': mcode = 0xfd; break;
+		case 'cli': mcode = 0xfa; break;
+		case 'sti': mcode = 0xfb; break;
+		case 'hlt': mcode = 0xf4; break;
+		case 'wait': mcode = 0x9b; break;
+		case 'lock': mcode = 0xf0; break;
+		default: break;
+		}
+		
+		console.log('0x' + mcode.toString(16).slice(-2));
 	}
 }
 
