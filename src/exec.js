@@ -1113,7 +1113,7 @@ function decode(instruction) {
 	case 0xDF:
 		break;
 
-	default:
+	default: console.log('[LOG] Invalid opcode!');
 		break;
 
 	}
